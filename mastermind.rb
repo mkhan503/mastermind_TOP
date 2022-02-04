@@ -17,7 +17,7 @@ module GameCode
   end
 
   def play_as_coder
-    puts 'Enter the secret code you want the computer to guess'
+    puts 'Enter the secret code you want the computer to guess. Please enter 4 colors from the available 6.'
     code = gets.chomp.downcase.split
     unless check_input_validity(code)
       puts 'One or more colors not included in the game. Enter code again'
@@ -52,7 +52,7 @@ module GameCode
     if guess.eql?(code)
       puts guess.join(' ')
       puts get_feedback(guess, code).join(' ')
-      @status == 'g' ? puts('You win!') : puts('Computer wins!')
+      @status == '1' ? puts('You win!') : puts('Computer cracked your code and wins!')
       play_again?
     else
       get_feedback(guess, code)
@@ -65,11 +65,11 @@ module GameCode
       sub_feedback = []
       code.each_with_index do |item1, index1|
         if item1 == item0 && index1 == index0
-          subfeedback << '@'
+          sub_feedback << '@'
         elsif item1 == item0
-          subfeedback << '*'
+          sub_feedback << '*'
         else
-          subfeedback << 'x'
+          sub_feedback << 'x'
         end
       end
       # this feedback will generate a 2 x 2 array that will contain
@@ -139,21 +139,25 @@ class MastermindGame
   NONE = 'x'
 
   def initialize
-    puts 'Welcome to Mastermind.
+    puts "Welcome to Mastermind.
     The code can be selected from 6 colors which are as follows:
     Red, Green, Blue, Yellow, Orange and Black'
+
+    @ means a color is in the correct position
+    * means a color is in the code but not in the correct position"
+    
     initialize_player
   end
 
   def initialize_player
     player = Player.new
     case player.status.downcase
-    when 'g'
+    when '1'
       play_as_guesser
-    when 'c'
+    when '2'
       play_as_coder
     else
-      puts 'Enter: Please enter g or c to select your position'
+      puts 'Enter: Please enter 1 or 2  to select your position'
       initialize_player
     end
   end
@@ -166,7 +170,7 @@ class Player < MastermindGame
   attr_reader :status
 
   def initialize
-    puts 'Would you like to play as guesser (g) or as coder (c)'
+    puts 'Would you like to play as code breaker (1) or as code maker (2)'
     @status = gets.chomp
   end
 end
